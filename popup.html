@@ -10,6 +10,15 @@
   </head>
   <body class="p-4">
     <h1 class="text-xl font-bold">TrackMyWeb</h1>
-    <p>Track your screen time on specific websites.</p>
+    <div id="time-spent" class="mt-4">
+      <p>Time spent on this website: <span id="time">0</span> seconds</p>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        chrome.storage.local.get(["timeSpent"], function (result) {
+          document.getElementById("time").textContent = result.timeSpent || 0;
+        });
+      });
+    </script>
   </body>
 </html>
