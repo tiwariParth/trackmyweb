@@ -1,5 +1,6 @@
 let activeTabId = null;
 let startTime = null;
+let activeTabUrl = null;
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Extension installed");
@@ -11,12 +12,16 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
   }
   activeTabId = activeInfo.tabId;
   startTime = new Date();
+  chrome.tabs.get(activeTabId, (tab) => {
+    activeTabUrl = new URL(tab.url).hostname;
+  });
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tabId === activeTabId) {
     calculateTimeSpent();
     startTime = new Date();
+    activeTabUrl = new URL(tab.url).hostname;
   }
 });
 
@@ -25,17 +30,23 @@ chrome.tabs.onRemoved.addListener((tabId) => {
     calculateTimeSpent();
     activeTabId = null;
     startTime = null;
+    activeTabUrl = null;
   }
 });
 
 function calculateTimeSpent() {
-  if (startTime) {
+  if (startTime && activeTabUrl) {
     const timeSpent = (new Date() - startTime) / 1000; // Time spent in seconds
-    console.log(`Time spent on tab ${activeTabId}: ${timeSpent} seconds`);
-    chrome.storage.local.get(["timeSpent"], function (result) {
-      const totalTime = (result.timeSpent || 0) + timeSpent;
-      chrome.storage.local.set({ timeSpent: totalTime }, function () {
-        console.log(`Total time spent updated to: ${totalTime} seconds`);
+    console.log(`Time spent on ${activeTabUrl}: ${timeSpent} seconds`);
+
+    chrome.storage.local.get(["timeSpentPerSite"], function (result) {
+      const timeSpentPerSite = result.timeSpentPerSite || {};
+      timeSpentPerSite[activeTabUrl] =
+        (timeSpentPerSite[activeTabUrl] || 0) + timeSpent;
+      chrome.storage.local.set({ timeSpentPerSite }, function () {
+        console.log(
+          `Total time spent on ${activeTabUrl} updated to: ${timeSpentPerSite[activeTabUrl]} seconds`
+        );
       });
     });
   }

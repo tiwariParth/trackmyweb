@@ -4,16 +4,22 @@
     <meta charset="UTF-8" />
     <title>TrackMyWeb</title>
     <link
-      <link
       href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
       rel="stylesheet"
     />
-    rel="stylesheet" />
   </head>
   <body class="p-4">
     <h1 class="text-xl font-bold">TrackMyWeb</h1>
     <div id="time-spent" class="mt-4">
-      <p>Time spent on this website: <span id="time">0</span> seconds</p>
+      <table class="table-auto w-full">
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Website</th>
+            <th class="px-4 py-2">Time Spent (seconds)</th>
+          </tr>
+        </thead>
+        <tbody id="time-spent-table-body"></tbody>
+      </table>
     </div>
     <script src="popup.js"></script>
   </body>
