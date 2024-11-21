@@ -36,8 +36,10 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 function calculateTimeSpent() {
   if (startTime && activeTabUrl) {
-    const timeSpent = (new Date() - startTime) / 1000; // Time spent in seconds
-    console.log(`Time spent on ${activeTabUrl}: ${timeSpent} seconds`);
+    const timeSpent = (new Date() - startTime) / 60000; // Time spent in minutes
+    console.log(
+      `Time spent on ${activeTabUrl}: ${timeSpent.toFixed(2)} minutes`
+    );
 
     chrome.storage.local.get(["timeSpentPerSite"], function (result) {
       const timeSpentPerSite = result.timeSpentPerSite || {};
@@ -45,7 +47,9 @@ function calculateTimeSpent() {
         (timeSpentPerSite[activeTabUrl] || 0) + timeSpent;
       chrome.storage.local.set({ timeSpentPerSite }, function () {
         console.log(
-          `Total time spent on ${activeTabUrl} updated to: ${timeSpentPerSite[activeTabUrl]} seconds`
+          `Total time spent on ${activeTabUrl} updated to: ${timeSpentPerSite[
+            activeTabUrl
+          ].toFixed(2)} minutes`
         );
       });
     });
