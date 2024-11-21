@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>TrackMyWeb</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="p-4">
-  <h1 class="text-xl font-bold">TrackMyWeb</h1>
-  <div id="time-spent" class="mt-4">
-    <p>Time spent on this website: <span id="time">0</span> seconds</p>
-  </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      chrome.storage.local.get(['timeSpent'], function(result) {
-        document.getElementById('time').textContent = result.timeSpent || 0;
-      });
-
-      chrome.storage.onChanged.addListener(function(changes, areaName) {
-        if (areaName === 'local' && changes.timeSpent) {
-          document.getElementById('time').textContent = changes.timeSpent.newValue || 0;
-        }
-      });
-    });
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>TrackMyWeb</title>
+    <link
+      <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+      rel="stylesheet"
+    />
+    rel="stylesheet" />
+  </head>
+  <body class="p-4">
+    <h1 class="text-xl font-bold">TrackMyWeb</h1>
+    <div id="time-spent" class="mt-4">
+      <p>Time spent on this website: <span id="time">0</span> seconds</p>
+    </div>
+    <script src="popup.js"></script>
+  </body>
 </html>
